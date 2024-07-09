@@ -3,8 +3,8 @@ import './App.css';
 import { Route, BrowserRouter as Router, Routes, Navigate } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { ThemeProvider } from '@emotion/react';
-import LoginPage from "./LoginPage";
-import HomePage from "./HomePage";
+import LoginPage from "./pages/LoginPage";
+import HomePage from "./pages/HomePage";
 import theme from "./theme";
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -48,26 +48,24 @@ function App() {
           clientId={process.env.REACT_APP_GOOGLE_O_AUTH_CLIENT_ID || ''}
         >
           <Router>
-            <div>
-              <Routes>
-                <Route path="/" element={<Navigate replace to="/login" />} />
+            <Routes>
+              <Route path="/" element={<Navigate replace to="/login" />} />
+              <Route
+                path="/login"
+                element={storedToken
+                  ? <Navigate replace to="/home" />
+                  : <LoginPage token={storedToken} setToken={setToken} />
+                }
+              />
+              <Route element={<ProtectedRoute token={storedToken} />}>
                 <Route
-                  path="/login"
-                  element={storedToken
-                    ? <Navigate replace to="/home" />
-                    : <LoginPage token={storedToken} setToken={setToken} />
+                  path="/home"
+                  element={
+                    <HomePage token={storedToken} removeToken={removeToken} />
                   }
                 />
-                <Route element={<ProtectedRoute token={storedToken} />}>
-                  <Route
-                    path="/home"
-                    element={
-                      <HomePage token={storedToken} removeToken={removeToken} />
-                    }
-                  />
-                </Route>
-              </Routes>
-            </div>
+              </Route>
+            </Routes>
           </Router>
         </GoogleOAuthProvider>
       </ThemeProvider>

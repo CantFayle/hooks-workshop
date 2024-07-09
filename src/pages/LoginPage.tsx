@@ -2,7 +2,7 @@ import React from 'react';
 import Button from "@mui/material/Button";
 import { useGoogleLogin } from "@react-oauth/google";
 import Cookies from "js-cookie";
-import {buttonStyle} from "./styles";
+import {buttonStyle} from "../styles";
 
 const GoogleLogo = () =>
   <img

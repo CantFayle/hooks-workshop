@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import { googleLogout } from "@react-oauth/google";
 import axios from "axios";
-import {formatDate} from "./utils";
-import {buttonStyle} from "./styles";
+import {formatDate} from "../utils";
+import {buttonStyle} from "../styles";
 
 type User = {
   id?: string;
@@ -21,7 +21,6 @@ function HomePage({ token, removeToken }: { token: { accessToken: string, expire
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
 
   const logout = () => {
-    console.log('sign out');
     setUser({});
     removeToken();
     googleLogout();
