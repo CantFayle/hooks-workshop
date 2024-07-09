@@ -18,7 +18,7 @@ const GoogleLogo = () =>
     }}
   />
 
-function LoginPage({token, setToken}: { token: any, setToken: (newToken: any) => void }) {
+function LoginPage({ setToken }: { setToken: (newToken: any) => void }) {
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => onSuccess(codeResponse),
     onError: (error) => console.log('Login Failed: ', error)

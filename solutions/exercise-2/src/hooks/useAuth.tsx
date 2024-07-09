@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext, createContext } from 'react';
 import axios from "axios";
 import Cookies from "js-cookie";
 import { googleLogout } from "@react-oauth/google";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useLocalStorage } from "./useLocalStorage";
 
-type User = {
+type TUser = {
   id?: string;
   email?: string;
   verified_email?: boolean;
@@ -16,8 +16,23 @@ type User = {
   hd?: string;
 };
 
-export const useAuth = () => {
-  const [user, setUser] = useState<User | undefined>(undefined);
+type TToken = {
+  accessToken: string;
+  expiresOn: number;
+}
+
+type TAuthContext = {
+  token?: TToken;
+  user?: TUser;
+  login?: () => void;
+  logout?: () => void;
+}
+
+const AuthContext = createContext<TAuthContext>({} as TAuthContext);
+const useAuth = () => useContext(AuthContext);
+
+const AuthProvider = ({ children }: { children: React.ReactElement }) => {
+  const [user, setUser] = useState<TUser | undefined>(undefined);
   const [token, setToken, removeToken] = useLocalStorage('token');
 
   const login = useGoogleLogin({
@@ -32,7 +47,7 @@ export const useAuth = () => {
     console.log("Successfully logged in!");
   }
 
-  const logout =() => {
+  const logout = () => {
     setUser(undefined);
     removeToken();
     googleLogout();
@@ -73,5 +88,13 @@ export const useAuth = () => {
     }
   }
 
-  return { user, token, login: () => login(), logout };
+  const value = { user, token, login: () => login(), logout };
+
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  )
 }
+
+export { useAuth, AuthProvider }
