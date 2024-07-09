@@ -17,11 +17,10 @@ type User = {
 };
 
 function HomePage({ token, removeToken }: { token: { accessToken: string, expiresOn: number }, removeToken: () => void }) {
-  const [user, setUser] = useState<User>({});
-  const [currentTime, setCurrentTime] = useState<Date>(new Date());
+  const [user, setUser] = useState<User | undefined>(undefined);
 
   const logout = () => {
-    setUser({});
+    setUser(undefined);
     removeToken();
     googleLogout();
   };
@@ -33,7 +32,6 @@ function HomePage({ token, removeToken }: { token: { accessToken: string, expire
       logout();
     } else {
       const timer = setTimeout(() => {
-        setCurrentTime(new Date())
         if (isTokenExpired) {
           logout();
         }
@@ -62,9 +60,18 @@ function HomePage({ token, removeToken }: { token: { accessToken: string, expire
     }
   }
 
+  const [currentTime, setCurrentTime] = useState<Date>(new Date());
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
   const data = {
-    'Name': user.name,
-    'Email': user.email,
+    'Name': user?.name,
+    'Email': user?.email,
     'Token expires at': formatDate(new Date(token.expiresOn)),
     'Current time': formatDate(currentTime)
   }
