@@ -1,7 +1,5 @@
 import React from 'react';
 import Button from "@mui/material/Button";
-import { useGoogleLogin } from "@react-oauth/google";
-import Cookies from "js-cookie";
 import {buttonStyle} from "../styles";
 
 const GoogleLogo = () =>
@@ -18,19 +16,7 @@ const GoogleLogo = () =>
     }}
   />
 
-function LoginPage({ setToken }: { setToken: (newToken: any) => void }) {
-  const login = useGoogleLogin({
-    onSuccess: (codeResponse) => onSuccess(codeResponse),
-    onError: (error) => console.log('Login Failed: ', error)
-  });
-
-  const onSuccess = async (codeResponse: any) => {
-    const expiresOn = (codeResponse.expires_in * 1000) + Date.now();
-    Cookies.set('token', codeResponse.access_token, { expires: new Date(expiresOn), secure: true });
-    setToken({ expiresOn, accessToken: codeResponse.access_token });
-    console.log("Successfully logged in!");
-  }
-
+function LoginPage({ login }: { login: () => void }) {
   return (
     <div>
       <Button

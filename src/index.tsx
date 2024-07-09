@@ -3,13 +3,22 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { ThemeProvider } from '@emotion/react';
+import theme from "./theme";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider theme={theme}>
+      <GoogleOAuthProvider
+        clientId={process.env.REACT_APP_GOOGLE_O_AUTH_CLIENT_ID || ''}
+      >
+        <App />
+      </GoogleOAuthProvider>
+    </ThemeProvider>
   </React.StrictMode>
 );
 

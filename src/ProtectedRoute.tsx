@@ -8,7 +8,7 @@ const ProtectedRoute = (
     children
   }: {
     redirectPath?: string,
-    token: string,
+    token: string | undefined,
     children?: React.ReactElement
   }
 ): React.ReactElement => {

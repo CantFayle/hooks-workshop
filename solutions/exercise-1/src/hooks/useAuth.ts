@@ -17,8 +17,8 @@ type User = {
 };
 
 export const useAuth = () => {
-  const [user, setUser] = useState<User | undefined>(undefined);
   const [token, setToken, removeToken] = useLocalStorage('token');
+  const [user, setUser] = useState<User | undefined>(undefined);
 
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => onSuccess(codeResponse),
